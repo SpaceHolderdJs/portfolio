@@ -1,0 +1,13 @@
+.portfolio {
+  align-self: flex-start;
+  width: 45%;
+  height: 90%;
+  margin: 10px;
+  border-radius: 20px;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.09)
+  );
+  padding: 10px;
+}

@@ -1,23 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer, createContext, useEffect } from "react";
+import "./App.css";
+
+import About from "./components/About";
+import Header from "./components/Header";
+import Portfolio from "./components/Portfolio";
+
+import { initScene, tabSwitcherHandler } from "./scene";
+
+export const Context = createContext();
+
+const reducer = (store, action) => {
+  switch (action.type) {
+    case "INIT_TAB":
+      return { ...store, tab: action.payload };
+    default:
+      return store;
+  }
+};
 
 function App() {
+  const [store, dispatch] = useReducer(reducer, {
+    tab: "about",
+  });
+
+  const { tab } = store;
+
+  useEffect(() => {
+    initScene();
+  }, []);
+
+  useEffect(() => {
+    tabSwitcherHandler(tab);
+  }, [tab]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="column centered app">
+      <Context.Provider value={{ dispatch, store }}>
+        <Header />
+        {tab === "about" && <About />}
+        {tab === "portfolio" && <Portfolio />}
+      </Context.Provider>
     </div>
   );
 }

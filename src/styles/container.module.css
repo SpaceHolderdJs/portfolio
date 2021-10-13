@@ -1,0 +1,27 @@
+.container {
+  width: 90%;
+}
+
+.container .title {
+  color: aquamarine;
+  letter-spacing: 3px;
+  transition: 0.5s all;
+  cursor: pointer;
+  justify-content: space-between;
+  margin: 5px;
+}
+
+.container .title:hover::after {
+  content: "[hide/show]";
+}
+.container .divider {
+  width: 100%;
+  border-radius: 20px;
+  height: 2px;
+  background: aquamarine;
+  transition: 0.3s all;
+}
+
+.container p {
+  margin: 5px;
+}
