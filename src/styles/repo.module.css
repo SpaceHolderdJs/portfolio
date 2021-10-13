@@ -1,0 +1,20 @@
+.repo {
+  width: 90%;
+}
+
+.repo .button {
+  width: 30%;
+  height: 40px;
+  margin: 10px;
+  border-radius: 20px;
+  background: linear-gradient(45deg, rgb(30, 30, 50), rgb(20, 20, 30));
+  text-decoration: none;
+  transition: 0.3s all;
+  border: none;
+  cursor: pointer;
+}
+
+.repo .button:hover {
+  color: aquamarine;
+  transform: scale(1.1);
+}

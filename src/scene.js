@@ -53,8 +53,8 @@ const l = new THREE.PointLight("white");
 l.position.set(0, 55, 0);
 scene.add(l);
 
-const pointLight = new THREE.PointLight("white", 7, 7);
-pointLight.position.set(0, 0, 0);
+const pointLight = new THREE.PointLight("white", 8, 9);
+pointLight.position.set(0, 0, 4);
 scene.add(pointLight);
 
 camera.position.z = 7;
@@ -82,7 +82,7 @@ class Repo {
 
     card.clickEventHandler = () => this.currentRepoSetter(this.repo);
 
-    card.position.set(Math.random() * 2 + 4, this.orderNumber * 6.5, -3);
+    card.position.set(Math.random() * 2 + 3, this.orderNumber * 6.5, -3);
 
     parent.add(card);
     return this;
@@ -103,6 +103,36 @@ export const initRepos = (repositories, currentRepoSetter) => {
   );
 };
 
+const starsCollector = new THREE.Object3D();
+scene.add(starsCollector);
+
+const starsGenerator = (q) => {
+  const material = new THREE.MeshBasicMaterial();
+  const geometry = new THREE.SphereBufferGeometry(0.03, 0.03, 5, 5);
+
+  for (let i = 0; i < q; i++) {
+    const star = new THREE.Mesh(geometry, material);
+    starsCollector.add(star);
+    star.position.set(
+      Math.random() * 15 - Math.random() * 15,
+      15 + Math.random() * 55,
+      Math.random() * 10 - Math.random() * 10
+    );
+  }
+};
+
+starsGenerator(1000);
+
+const moonMaterial = new THREE.MeshBasicMaterial({
+  map: loader.load("/moonMap.jpg"),
+});
+const moonGeo = new THREE.SphereGeometry(10, 10, 55, 55);
+
+const moon = new THREE.Mesh(moonGeo, moonMaterial);
+moon.position.set(-3, 20 + Math.random() * 10, -20);
+
+scene.add(moon);
+
 //listeners
 
 let y = 0;
@@ -113,10 +143,12 @@ const mouse = new THREE.Vector2();
 window.addEventListener("mousemove", (e) => {
   mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+  camera.rotation.y = (window.innerWidth / 2 - e.pageX) * 0.0003;
 });
 
 window.addEventListener("wheel", (e) => {
-  y = e.deltaY * 0.0009;
+  y = e.deltaY * 0.0012;
 });
 
 window.addEventListener("scroll", (e) => {
@@ -129,7 +161,7 @@ window.addEventListener("mousemove", (e) => {
   pointLight.position.set(
     1 + (e.pageX - window.innerWidth / 2) * 0.0055,
     1 + (window.innerWidth / 2 - e.pageY) * 0.005,
-    -1.5
+    4
   );
 
   plane.material.displacementScale = (e.pageX - window.innerWidth / 2) * 0.0075;
@@ -154,6 +186,11 @@ export const tabSwitcherHandler = (tab) => {
   }
 };
 
+export const scrollToRepo = (indx) => {
+  y = cardsParentObj.children[indx].position.y * 0.105;
+  l.position.y = camera.position.y = position = y;
+};
+
 const raycaster = new THREE.Raycaster();
 
 const animate = function () {
@@ -166,6 +203,7 @@ const animate = function () {
   intersects.forEach((intersect) => {
     gsap.to(intersect.object.scale, { x: 1.2, y: 1.2 });
     gsap.to(intersect.object.rotation, { y: -0.3 });
+    gsap.to(intersect.object.position, { z: 1 });
     intersect.object.material.displacementScale = 0;
   });
 
@@ -177,6 +215,7 @@ const animate = function () {
     .forEach((obj) => {
       gsap.to(obj.scale, { x: 1, y: 1 });
       gsap.to(obj.rotation, { y: 0 });
+      gsap.to(obj.position, { z: -3 });
     });
 
   //scrolls
@@ -188,6 +227,10 @@ const animate = function () {
   //   plane.material.displacementScale += 0.001;
 
   plane.rotation.z += 0.002;
+  starsCollector.rotation.y += 0.002;
+  moon.rotation.y += 0.002;
+  moon.rotation.x += 0.002;
+
   renderer.render(scene, camera);
 };
 

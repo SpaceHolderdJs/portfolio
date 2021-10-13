@@ -1,0 +1,22 @@
+.list {
+  width: 70%;
+  height: 50vh;
+  overflow-y: auto;
+}
+
+.list .repoSmall {
+  width: 90%;
+  height: 10%;
+  transition: 0.3s all;
+  cursor: pointer;
+  margin: 10px;
+  padding: 5px;
+  border-radius: 20px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgb(30, 30, 50));
+  justify-content: space-between;
+}
+
+.list .repoSmall span {
+  font-size: 13px;
+  color: lightgrey;
+}
